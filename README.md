@@ -91,6 +91,13 @@ uart\_zcu104\_project/
 
 ---
 
+## Demonstra
+
+https://github.com/user-attachments/assets/3c770a49-dc15-4ba2-9bae-485a01e4d926
+
+tion
+
+
 ## 🚀 Enhancements (Future Scope)
 
 - Add **UART Interrupts** for efficient I/O
