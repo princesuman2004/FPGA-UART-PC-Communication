@@ -44,15 +44,10 @@ To correctly send and receive data via UART:
 
 ```
 
-uart\_zcu104\_project/
-├── vivado\_project/
-│   └── uart\_top.xpr
-├── vitis\_workspace/
-│   └── uart\_app.c
-├── scripts/
-│   └── send\_receive.py
-├── README.md
-
+├── scripts/                  # Python script for serial communication
+├── vivado project/          # Vivado design (ZCU104_UART.xpr.zip)
+├── vitis workspace/         # Vitis firmware workspace (ZCU104_UART_Vitis.ide.zip)
+└── README.md                # Project description and instructions
 ```
 
 ---
