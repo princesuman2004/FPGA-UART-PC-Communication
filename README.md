@@ -118,6 +118,14 @@ set_property IOSTANDARD LVCMOS33 [get_ports uart2_pl_txd]
 
 ---
 
+## 🚀 Demonstration
+
+
+https://github.com/user-attachments/assets/baad51b8-8216-4b33-a3f4-4ef4d8b0dcb5
+
+
+---
+
 ## 📜 License
 
 This project is released under the [MIT License](https://opensource.org/licenses/MIT).
