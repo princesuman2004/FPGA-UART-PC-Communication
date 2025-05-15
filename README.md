@@ -106,7 +106,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports uart2_pl_txd]
 ## 🚀 How to Run
 
 1. Connect the **USB-TTL adapter** to the PMOD header (JA) on the ZCU104 board using the above pin mapping.
-2. Power on the ZCU104 board and program the FPGA using Vivado with the provided bitstream.
+2. Power on the ZCU104 board and program the FPGA using Vitis Classic with the provided bitstream.
 3. On your PC, connect the USB-TTL adapter to a USB port.
 4. Run the Python script located in `scripts/` folder:
 
