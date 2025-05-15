@@ -48,12 +48,9 @@ uart\_zcu104\_project/
 ├── vivado\_project/
 │   └── uart\_top.xpr
 ├── vitis\_workspace/
-│   └── uart\_app/
-│       └── src/main.c
+│   └── uart\_app.c
 ├── scripts/
 │   └── send\_receive.py
-├── docs/
-│   └── block\_diagram.png
 ├── README.md
 
 ```
