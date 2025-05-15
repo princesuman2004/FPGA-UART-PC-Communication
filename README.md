@@ -1,7 +1,7 @@
 
 # UART–PC Communication on ZCU104 via AXI UARTLite
 
-This project enables communication between a **ZCU104 FPGA board** and a **PC** over UART using the AXI UARTLite IP core. The system multiplies two 32-bit unsigned integers sent from the PC, computes the product on the FPGA, and returns a 64-bit result.
+This project enables communication between a **ZCU104 FPGA board** and a **PC** over UART using AXI UARTLite IP. The system multiplies two 32-bit integers sent from the PC, processes them on the FPGA, and returns a 64-bit result.
 
 ---
 
@@ -9,32 +9,44 @@ This project enables communication between a **ZCU104 FPGA board** and a **PC** 
 
 - **Board:** ZCU104 (Zynq UltraScale+ MPSoC)
 - **Interface:** AXI UARTLite
-- **PC Side:** Python script (via `pyserial`)
+- **PC Side:** Python script
 - **Functionality:** Multiply two 32-bit unsigned integers and return the result
 - **Data Encoding:** Little-endian (LSB first)
 
 ---
 
-## 🛠️ Tools Used
+## 📁 Tools Used
 
 | Tool        | Version              |
 |-------------|----------------------|
 | Vivado      | 2023.2 (or later)    |
 | Vitis       | 2023.2 (or later)    |
-| Python      | 3.8+ with `pyserial` |
+| Python      | 3.8+                 |
 | Hardware    | ZCU104 FPGA Board    |
 
 ---
 
-## 📁 Project Structure
+## 🔌 UART Configuration
+
+To correctly send and receive data via UART:
+
+- **Baud Rate:** `9600`
+- **Data Bits:** `8`
+- **Parity:** `None`
+- **Stop Bits:** `1`
+- **Flow Control:** `None`
+- **Terminal Settings:** Enable **Local Echo** if using a terminal emulator with echo off
+
+---
+
+## 📦 Project Structure
 
 ```
 
 ├── scripts/                  # Python script for serial communication
-│   └── send\_receive.py
-├── vivado project/          # Vivado design (ZCU104\_UART.xpr.zip)
-├── vitis workspace/         # Vitis firmware workspace (ZCU104\_UART\_Vitis.ide.zip)
-└── README.md                # Project description and instructions
+├── vivado project/           # Vivado design (ZCU104\_UART.xpr.zip)
+├── vitis workspace/          # Vitis firmware workspace (ZCU104\_UART\_Vitis.ide.zip)
+└── README.md                 # Project description and instructions
 
 ````
 
@@ -42,7 +54,7 @@ This project enables communication between a **ZCU104 FPGA board** and a **PC** 
 
 ## 🖼️ Block Diagram
 
-![Block Diagram](https://github.com/user-attachments/assets/41b21503-878e-4212-bba2-0c2618f6626a)
+![image](https://github.com/user-attachments/assets/41b21503-878e-4212-bba2-0c2618f6626a)
 
 ### Key Components:
 
@@ -55,66 +67,54 @@ This project enables communication between a **ZCU104 FPGA board** and a **PC** 
 
 ## 📤 Data Flow
 
-1. **User inputs two integers** on the PC.
-2. **Python script packs and sends** them as 8 bytes over UART.
-3. **FPGA receives and unpacks** the data.
-4. **FPGA multiplies** the inputs and sends back a 64-bit result.
-5. **PC script unpacks and displays** the result.
+1. **User inputs two integers** on PC (via Python).
+2. **PC packs them into 8 bytes** and sends via UART.
+3. **FPGA receives** the data, unpacks it, and computes the product.
+4. **FPGA sends back** 8 bytes representing the 64-bit result.
+5. **PC receives and displays** the final result.
 
 ---
 
-## ▶️ How to Run
+## 🧪 Testing Example
 
-### 1. Setup Hardware
+| A (Input) | B (Input) | Result          |
+|----------:|----------:|----------------:|
+| 3         | 5         | 15              |
+| 1234      | 4321      | 5322114         |
+| 65536     | 65536     | 4294967296      |
 
-- Connect ZCU104 to PC via USB-UART.
-- Make sure Vivado & Vitis design is built and programmed to the board.
+---
 
-### 2. Python Environment Setup
+## 📌 FPGA Constraints (XDC Mapping)
 
-Install Python and `pyserial`:
+These constraints connect the AXI UARTLite signals to PMOD pins (ZCU104) for UART communication via USB-TTL.
 
-```bash
-pip install pyserial
+```tcl
+## UART TX and RX Pin Mapping
+set_property PACKAGE_PIN G8 [get_ports uart2_pl_txd]
+set_property PACKAGE_PIN G6 [get_ports uart2_pl_rxd]
+
+## I/O Standard
+set_property IOSTANDARD LVCMOS33 [get_ports uart2_pl_rxd]
+set_property IOSTANDARD LVCMOS33 [get_ports uart2_pl_txd]
 ````
 
-### 3. Run Python Script
-
-From the `scripts/` folder, run:
-
-```bash
-python send_receive.py
-```
-
-* Enter two unsigned 32-bit integers when prompted.
-* You'll receive the 64-bit result back from the FPGA.
-
-> ⚠️ Make sure to set the correct COM port in the script (e.g., `COM3`) and baud rate `9600`.
+> 💡 **Note:** These map to **PMOD header JA** on ZCU104. Ensure the USB-TTL adapter’s TX and RX are connected crosswise (PC TX → FPGA RX, PC RX ← FPGA TX).
 
 ---
 
-## 🧪 Example Test Cases
+## 🚀 How to Run
 
-| A (Input) | B (Input) |     Result |
-| --------: | --------: | ---------: |
-|         3 |         5 |         15 |
-|      1234 |      4321 |    5322114 |
-|     65536 |     65536 | 4294967296 |
+1. Connect the **USB-TTL adapter** to the PMOD header (JA) on the ZCU104 board using the above pin mapping.
+2. Power on the ZCU104 board and program the FPGA using Vivado with the provided bitstream.
+3. On your PC, connect the USB-TTL adapter to a USB port.
+4. Run the Python script located in `scripts/` folder:
 
----
-
-## 🎥 Demonstration
-
-[https://github.com/user-attachments/assets/3c770a49-dc15-4ba2-9bae-485a01e4d926](https://github.com/user-attachments/assets/3c770a49-dc15-4ba2-9bae-485a01e4d926)
-
----
-
-## 🚀 Future Enhancements
-
-* Add **UART Interrupts** for efficient I/O
-* Enable **DMA-based UART** transfer
-* Integrate **custom PL logic** for other ALU operations
-* Build **GUI (Tkinter/PyQt5)** for user-friendly control
+   ```bash
+   python uart_communication.py
+   ```
+5. Input two unsigned 32-bit integers when prompted.
+6. The script will send these to FPGA, receive the 64-bit product, and print the result.
 
 ---
 
@@ -122,11 +122,13 @@ python send_receive.py
 
 **Prince Suman**
 B.Tech, IIT Indore
-Enthusiast in Computer Architecture, Digital Design, and Embedded Systems.
+Interested in Computer Architecture, Digital Design & Embedded Systems.
 
 ---
 
 ## 📜 License
 
 This project is released under the [MIT License](https://opensource.org/licenses/MIT).
+
+---
 
