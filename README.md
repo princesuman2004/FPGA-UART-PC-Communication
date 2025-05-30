@@ -99,7 +99,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports uart2_pl_rxd]
 set_property IOSTANDARD LVCMOS33 [get_ports uart2_pl_txd]
 ````
 
-> 💡 **Note:** These map to **PMOD header JA** on ZCU104. Ensure the USB-TTL adapter’s TX and RX are connected crosswise (PC TX → FPGA RX, PC RX ← FPGA TX).
+> 💡 **Note:** These map to **PMOD header J55** on ZCU104. Ensure the USB-TTL adapter’s TX and RX are connected crosswise (PC TX → FPGA RX, PC RX ← FPGA TX).
 
 ---
 
